@@ -2,7 +2,12 @@
 
 ## About The Project
 
-This project is designed to trigger alerts on aircraft from Dump1090
+This project is designed to trigger alerts on aircraft from Dump1090.
+Currently it's set to alert if an aircraft is squawking 7001 for low-level flying,
+or under 2000ft altitude. An aircraft can only trigger these alerts if it's inside
+a defined bounding box.
+
+Alerts are sent to Pushover and can be push notifications on IOS, Android, or desktop.
 
 ### Built With
 
