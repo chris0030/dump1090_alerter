@@ -83,7 +83,7 @@ class TestApp(unittest.TestCase):
         bounding_check = bounding_box.check_bounding(lat, long)
         assert bounding_check
 
-    def test_bounding_box_check_bounding(self):
+    def test_bounding_box_check_bounding_false(self):
         bounding_box = BoundingBox(
             BB_UPPER_LAT, 
             BB_LOWER_LAT, 
@@ -92,6 +92,18 @@ class TestApp(unittest.TestCase):
         )
         lat = 53.136473
         long = -3.994560
+        bounding_check = bounding_box.check_bounding(lat, long)
+        assert not bounding_check
+
+    def test_bounding_box_check_bounding_none(self):
+        bounding_box = BoundingBox(
+            BB_UPPER_LAT, 
+            BB_LOWER_LAT, 
+            BB_UPPER_LON, 
+            BB_LOWER_LON
+        )
+        lat = None
+        long = None
         bounding_check = bounding_box.check_bounding(lat, long)
         assert not bounding_check
 

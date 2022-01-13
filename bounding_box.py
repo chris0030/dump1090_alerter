@@ -6,6 +6,8 @@ class BoundingBox:
         self.lower_lon = lower_lon
 
     def _is_between(self, check_value, upper_value, lower_value):
+        if not check_value:
+            return False
         if check_value < upper_value and check_value > lower_value:
             return True
         return False
