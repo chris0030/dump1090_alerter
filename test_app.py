@@ -1,6 +1,5 @@
 import unittest
 from app import (
-    get_aircraft_photo,
     load_json_file,
     parse_json_from_file,
     check_squawk_from_ac,
@@ -9,13 +8,15 @@ from app import (
 )
 from bounding_box import BoundingBox
 from pushover import Pushover
+from aircraft_photos import AircraftPhotos
 from test_aircraft import test_aircraft_json
 from config import *
 
 class TestApp(unittest.TestCase):
 
     def test_get_aircraft_photo(self):
-        url = get_aircraft_photo("43C2B5")
+        ac_photos = AircraftPhotos(PS_URL)
+        url = ac_photos.get_photo_url("43C2B5")
         assert url == "https://cdn.planespotters.net/34417/zz419-royal-air-force-hawker-beechcraft-350cer-shadow-r1-b300c_PlanespottersNet_578211_c0d291f1e8_t.jpg"
 
     def test_send_push_notification(self):

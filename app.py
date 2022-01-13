@@ -4,15 +4,8 @@ import requests
 import pprint
 from bounding_box import BoundingBox
 from pushover import Pushover
+from aircraft_photos import AircraftPhotos
 from config import *
-
-def get_aircraft_photo(hex):
-    headers = {"User-Agent": "Requests 1.0"}
-    response = requests.get(PS_URL + hex, headers=headers)
-    json_response = response.json()
-    if not json_response.get('photos'):
-        return None
-    return json_response['photos'][0]['thumbnail']['src']
 
 def load_json_file(path):
     with open(path, 'r') as file:
@@ -58,6 +51,7 @@ if __name__ == '__main__':
         PUSHOVER_USER_KEY,
         PUSHOVER_URL,
     )
+    ac_photos = AircraftPhotos(PS_URL)
     pushover.send_notification("Starting alerter")
     while True:
         json_file = load_json_file(AIRCRAFT_JSON)
@@ -75,7 +69,7 @@ if __name__ == '__main__':
                 message = f"Aircraft alerting: Flight: {ac.get('flight')} - Alt {altitude} - Squawk: {ac.get('squawk')}"
                 pp.pprint(message)
                 hex = ac.get('hex')
-                photo = get_aircraft_photo(hex) if hex else None
+                photo = ac_photos.get_photo_url(hex) if hex else None
                 if photo:
                     response = requests.get(photo.replace("\\", ""))
                     photo_data = response.content
