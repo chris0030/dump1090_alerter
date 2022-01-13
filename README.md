@@ -17,7 +17,7 @@ Following are instructions to get a development environment up and running
 
 1. Copy config.template to config.py `cp config.template config.py`
 
-1. Fill in the missing items, you'll need a Pushover account
+1. Fill in the missing items, you'll need a [Pushover](https://pushover.net/) account
 
 1. Install the requirements `pip install -r requirements.txt`
 
