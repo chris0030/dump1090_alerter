@@ -99,4 +99,4 @@ if __name__ == "__main__":
                 if updated:
                     for ac in aircrafts:
                         print(ac)
-                        print("\n")
+                    print("\n")
