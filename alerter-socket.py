@@ -68,7 +68,7 @@ class Aircraft:
         return updated
 
     def __repr__(self):
-        return f"{self.hex} {self.callsign} {self.lat} {self.long}\n"
+        return f"Hex: {self.hex} Call:{self.callsign} Lat:{self.lat} Long:{self.long} Alt: {self.altitude} Spd: {self.ground_speed} Squawk: {self.squawk}"
 
 def seperate_messages(message_string):
     decoded_string = message_string.decode('utf-8')
