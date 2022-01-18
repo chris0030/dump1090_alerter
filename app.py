@@ -39,6 +39,8 @@ def check_alt_from_ac(altitude, check_altitude, under=True):
         return altitude > check_altitude
 
 def callsign_matches(callsign, matched_callsign):
+    if not callsign:
+        return False
     return callsign.upper() == matched_callsign.upper()
 
 if __name__ == '__main__':
@@ -69,7 +71,7 @@ if __name__ == '__main__':
                 ac.get('lat'),
                 ac.get('lon')
             )
-            alert = (squawk_check or alt_check or callsign_match) and bounding_check
+            alert = ((squawk_check or alt_check) and bounding_check) or (callsign_match and alt_check)
             if alert:
                 message = f"Aircraft alerting: Flight: {ac.get('flight')} - Alt {altitude} - Squawk: {ac.get('squawk')}"
                 pp.pprint(message)
