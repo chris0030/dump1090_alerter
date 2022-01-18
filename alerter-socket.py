@@ -33,7 +33,7 @@ class Aircraft:
     def __init__(self, msg):
         self.msg = msg
         self.hex = msg[4]
-        self.callsign = msg[10]
+        self.callsign = msg[10].replace(" ", "")
         self.altitude = msg[11]
         self.ground_speed = msg[12]
         self.lat = msg[14]
@@ -44,8 +44,8 @@ class Aircraft:
     def update(self, msg):
         updated = False
         self.msg = msg
-        if msg[10] and self.callsign != msg[10]:
-            self.callsign = msg[10]
+        if msg[10] and self.callsign != msg[10].replace(" ", ""):
+            self.callsign = msg[10].replace(" ", "")
             updated = True
         if msg[11] and self.altitude != msg[11]:
             self.altitude = msg[11]
