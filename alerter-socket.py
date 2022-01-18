@@ -87,7 +87,7 @@ if __name__ == "__main__":
             for split_message in message_array:
                 updated = False
                 parsed_message = parse_message_string(split_message)
-                if not parsed_message or parsed_message == [''] or len(parsed_message) < 17:
+                if not parsed_message or parsed_message == [''] or len(parsed_message) < 18:
                     continue
                 ac = Aircraft(parsed_message)
                 matching_ac = [aircraft for aircraft in aircrafts if aircraft.hex == ac.hex]
