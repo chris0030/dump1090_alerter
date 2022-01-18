@@ -38,6 +38,9 @@ def check_alt_from_ac(altitude, check_altitude, under=True):
     else:
         return altitude > check_altitude
 
+def callsign_matches(callsign, matched_callsign):
+    return callsign.upper() == matched_callsign.upper()
+
 if __name__ == '__main__':
     pp = pprint.PrettyPrinter(indent=2)
     bounding_box = BoundingBox(
@@ -58,13 +61,15 @@ if __name__ == '__main__':
         ac_list = parse_json_from_file(json_file)
         for ac in ac_list:
             altitude = get_alt_from_ac(ac)
+            flight = ac.get('flight')
+            callsign_match = callsign_matches(flight, "ID")
             squawk_check = check_squawk_from_ac(ac, "7001")
             alt_check = check_alt_from_ac(altitude, 2000)
             bounding_check = bounding_box.check_bounding(
                 ac.get('lat'),
                 ac.get('lon')
             )
-            alert = (squawk_check or alt_check) and bounding_check
+            alert = (squawk_check or alt_check or callsign_match) and bounding_check
             if alert:
                 message = f"Aircraft alerting: Flight: {ac.get('flight')} - Alt {altitude} - Squawk: {ac.get('squawk')}"
                 pp.pprint(message)
