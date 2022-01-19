@@ -194,6 +194,7 @@ if __name__ == "__main__":
     aircrafts = []
     with Live(generate_table([]), refresh_per_second=1) as live:
         while True:
+            print(count)
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect((HOST, PORT))
                 message_string = s.recv(1024)
