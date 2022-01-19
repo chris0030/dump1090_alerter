@@ -126,5 +126,5 @@ if __name__ == "__main__":
                 if updated:
                     for ac in aircrafts:
                         table_data.append(ac.return_table_row())
-                    live.table(generate_table(table_data))
+                    live.update(generate_table(table_data))
 
