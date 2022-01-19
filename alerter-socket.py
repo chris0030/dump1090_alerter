@@ -6,7 +6,7 @@ import os
 from rich.live import Live
 from rich.table import Table
 from geopy.distance import geodesic
-
+from datetime import datetime
 
 FIELDS = [
     "message_type",
@@ -52,6 +52,7 @@ class Aircraft:
         self.model = HEX_LOOKUP.get(self.hex)
         self.operator = self.get_operator(AIRCRAFT_CODES)
         self.distance = self.get_distance()
+        self.last_updated = datetime.now()
 
     def get_distance(self):
         if not HOME_LAT or not HOME_LONG:
@@ -88,13 +89,15 @@ class Aircraft:
         if msg[17] and self.squawk != msg[17]:
             self.squawk = msg[17]
             updated = True
+        if updated:
+            self.last_updated = datetime.now()
         return updated
 
     def get_operator(self, ac_code_lookup):
         return ac_code_lookup.get(self.callsign[0:3])
 
     def return_table_row(self):
-        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk,self.distance]
+        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk,self.distance, self.last_updated]
 
     def __repr__(self):
         return f"{self.hex},{self.callsign},{self.model},{self.operator},{self.lat},{self.long},{self.altitude},{self.ground_speed},{self.squawk}"
@@ -106,14 +109,14 @@ def seperate_messages(message_string):
 def parse_message_string(message_string):
     return message_string.split(',')
 
-TABLE_HEADERS = ["Hex", "Callsign", "Model", "Operator", "Lat", "Long", "Altitude", "Ground Speed", "Squawk", "Distance"]
+TABLE_HEADERS = ["Hex", "Callsign", "Model", "Operator", "Lat", "Long", "Altitude", "Ground Speed", "Squawk", "Distance", "Last Seen"]
 
 def generate_table(table_data):
     table = Table()
     for header in TABLE_HEADERS:
         table.add_column(header)
     for dr in table_data:
-        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8], dr[9])
+        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8], dr[9], dr[10])
     return table
 
 
