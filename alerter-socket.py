@@ -1,5 +1,6 @@
 from re import I
 import socket
+from hex_lookup import HEX_LOOKUP
 
 FIELDS = [
     "message_type",
@@ -40,6 +41,7 @@ class Aircraft:
         self.long = msg[15]
         self.vertical_rate = msg[16]
         self.squawk = msg[17]
+        self.model = HEX_LOOKUP.get(self.hex)
 
     def update(self, msg):
         updated = False
@@ -68,7 +70,7 @@ class Aircraft:
         return updated
 
     def __repr__(self):
-        return f"Hex: {self.hex} Call:{self.callsign} Lat:{self.lat} Long:{self.long} Alt: {self.altitude} Spd: {self.ground_speed} Squawk: {self.squawk}"
+        return f"Hex: {self.hex} Call:{self.callsign} Model: {self.model} Lat:{self.lat} Long:{self.long} Alt: {self.altitude} Spd: {self.ground_speed} Squawk: {self.squawk}"
 
 def seperate_messages(message_string):
     decoded_string = message_string.decode('utf-8')

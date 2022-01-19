@@ -8,9 +8,8 @@ class BoundingBox:
     def _is_between(self, check_value, upper_value, lower_value):
         if not check_value:
             return False
-        if check_value < upper_value and check_value > lower_value:
-            return True
-        return False
+        return check_value < upper_value and check_value > lower_value
+
 
     def check_bounding(self, lat, lon):
         lat_bounding = self._is_between(lat, self.upper_lat, self.lower_lat)
