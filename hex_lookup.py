@@ -110,7 +110,7 @@ F15_CODES = [
 ]
 
 for code in F15_CODES:
-    HEX_LOOKUP[code] = "F15"
+    HEX_LOOKUP[code] = ["F15"]
 
 HAWK_CODES = [
 '70C0D1',
@@ -248,4 +248,4 @@ HAWK_CODES = [
 ]
 
 for code in HAWK_CODES:
-    HEX_LOOKUP[code] = "HAWK"
+    HEX_LOOKUP[code] = MODEL["HAWK"]
