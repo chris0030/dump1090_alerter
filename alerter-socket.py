@@ -106,7 +106,7 @@ if __name__ == "__main__":
                     aircrafts.append(ac)
                     updated = True
                 if updated:
+                    os.system('cls' if os.name == 'nt' else 'clear')
                     for ac in aircrafts:
-                        os.system('cls' if os.name == 'nt' else 'clear')
                         print(ac)
                     print("\n")
