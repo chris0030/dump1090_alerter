@@ -4,6 +4,8 @@ from hex_lookup import HEX_LOOKUP
 from aircraft_code_lookup import AIRCRAFT_CODES
 import os
 from terminaltables import AsciiTable
+from rich.live import Live
+from rich.table import Table
 
 FIELDS = [
     "message_type",
@@ -92,9 +94,19 @@ def parse_message_string(message_string):
 
 TABLE_HEADERS = ["Hex", "Callsign", "Model", "Operator", "Lat", "Long", "Altitude", "Ground Speed", "Squawk"]
 
+def generate_table(table_data):
+    table = Table()
+    for header in TABLE_HEADERS:
+        table.add_column(header)
+    for data_row in table_data:
+        table.add_row(data_row)
+    return table
+
+
 if __name__ == "__main__":
     aircrafts = []
-    while True:
+    with Live(generate_table(), refresh_per_second=4) as live:
+        table_data = []
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((HOST, PORT))
             message_string = s.recv(1024)
@@ -112,9 +124,7 @@ if __name__ == "__main__":
                     aircrafts.append(ac)
                     updated = True
                 if updated:
-                    table_data = [TABLE_HEADERS]
                     for ac in aircrafts:
                         table_data.append(ac.return_table_row())
-                    table = AsciiTable(table_data)
-                    print(table.table, end='\r')
+                    live.table(generate_table(table_data))
 
