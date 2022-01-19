@@ -105,26 +105,27 @@ def generate_table(table_data):
 
 if __name__ == "__main__":
     aircrafts = []
-    with Live(generate_table([]), refresh_per_second=4) as live:
-        table_data = []
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((HOST, PORT))
-            message_string = s.recv(1024)
-            message_array = seperate_messages(message_string)
-            for split_message in message_array:
-                updated = False
-                parsed_message = parse_message_string(split_message)
-                if not parsed_message or parsed_message == [''] or len(parsed_message) < 18:
-                    continue
-                ac = Aircraft(parsed_message)
-                matching_ac = [aircraft for aircraft in aircrafts if aircraft.hex == ac.hex]
-                if matching_ac:
-                    updated = matching_ac[0].update(parsed_message)
-                else:
-                    aircrafts.append(ac)
-                    updated = True
-                if updated:
-                    for ac in aircrafts:
-                        table_data.append(ac.return_table_row())
-                    live.update(generate_table(table_data))
+    while True:
+        with Live(generate_table([]), refresh_per_second=4) as live:
+            table_data = []
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect((HOST, PORT))
+                message_string = s.recv(1024)
+                message_array = seperate_messages(message_string)
+                for split_message in message_array:
+                    updated = False
+                    parsed_message = parse_message_string(split_message)
+                    if not parsed_message or parsed_message == [''] or len(parsed_message) < 18:
+                        continue
+                    ac = Aircraft(parsed_message)
+                    matching_ac = [aircraft for aircraft in aircrafts if aircraft.hex == ac.hex]
+                    if matching_ac:
+                        updated = matching_ac[0].update(parsed_message)
+                    else:
+                        aircrafts.append(ac)
+                        updated = True
+                    if updated:
+                        for ac in aircrafts:
+                            table_data.append(ac.return_table_row())
+                        live.update(generate_table(table_data))
 
