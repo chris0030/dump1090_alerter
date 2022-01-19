@@ -6,6 +6,7 @@ MODEL = {
     "GL7T": "Bombardier BD700-Global",
     "B748": "Boeing 747-8F",
     "TEX2": "BEECHCRAFT T-6 Texan 2",
+    "HAWK": "Hawk T2",
 }
 
 HEX_LOOKUP = {
@@ -22,4 +23,5 @@ HEX_LOOKUP = {
     "43C921": MODEL['TEX2'],
     "43C8CA": MODEL['TEX2'],
     "43C8CE": MODEL['TEX2'],
+    "43C553": MODEL['HAWK'],
 }
