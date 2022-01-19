@@ -99,7 +99,7 @@ class Aircraft:
     def seen_ago(self):
         now = datetime.now()
         time_delta = now - self.last_updated
-        return time_delta.total_seconds()
+        return int(time_delta.total_seconds())
 
     def return_table_row(self):
         return [
