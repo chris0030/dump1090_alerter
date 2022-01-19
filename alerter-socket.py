@@ -105,8 +105,8 @@ def generate_table(table_data):
 
 if __name__ == "__main__":
     aircrafts = []
-    while True:
-        with Live(generate_table([]), refresh_per_second=4) as live:
+    with Live(generate_table([]), refresh_per_second=4) as live:
+        while True:
             table_data = []
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect((HOST, PORT))
