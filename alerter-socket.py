@@ -96,6 +96,11 @@ class Aircraft:
     def get_operator(self, ac_code_lookup):
         return ac_code_lookup.get(self.callsign[0:3])
 
+    def seen_ago(self):
+        now = datetime.now()
+        time_delta = now - self.last_updated
+        return time_delta.total_seconds()
+
     def return_table_row(self):
         return [
             self.hex,
@@ -108,7 +113,7 @@ class Aircraft:
             self.ground_speed,
             self.squawk,
             self.distance,
-            self.last_updated.strftime("%H:%M:%S"),
+            str(self.seen_ago()),
         ]
 
     def __repr__(self):
