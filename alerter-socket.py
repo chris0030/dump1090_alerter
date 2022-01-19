@@ -77,6 +77,9 @@ class Aircraft:
     def get_operator(self, ac_code_lookup):
         return ac_code_lookup.get(self.callsign[0:3])
 
+    def return_table_row(self):
+        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk]
+
     def __repr__(self):
         return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk]
 
@@ -111,6 +114,6 @@ if __name__ == "__main__":
                 if updated:
                     table_data = [TABLE_HEADERS]
                     for ac in aircrafts:
-                        table_data.append(ac)
+                        table_data.append(ac.return_table_row())
                     table = AsciiTable(table_data)
                     print(table.table)
