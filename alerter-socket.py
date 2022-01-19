@@ -80,7 +80,7 @@ class Aircraft:
         return ac_code_lookup.get(self.callsign[0:3])
 
     def return_table_row(self):
-        return (self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk)
+        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk]
 
     def __repr__(self):
         return f"{self.hex},{self.callsign},{self.model},{self.operator},{self.lat},{self.long},{self.altitude},{self.ground_speed},{self.squawk}"
@@ -98,8 +98,8 @@ def generate_table(table_data):
     table = Table()
     for header in TABLE_HEADERS:
         table.add_column(header)
-    for data_row in table_data:
-        table.add_row(data for data in data_row)
+    for dr in table_data:
+        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8])
     return table
 
 
