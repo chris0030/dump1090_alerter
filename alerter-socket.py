@@ -1,6 +1,7 @@
 from re import I
 import socket
 from hex_lookup import HEX_LOOKUP
+from aircraft_code_lookup import AIRCRAFT_CODES
 
 FIELDS = [
     "message_type",
@@ -42,12 +43,14 @@ class Aircraft:
         self.vertical_rate = msg[16]
         self.squawk = msg[17]
         self.model = HEX_LOOKUP.get(self.hex)
+        self.operator = self.get_operator(AIRCRAFT_CODES)
 
     def update(self, msg):
         updated = False
         self.msg = msg
         if msg[10] and self.callsign != msg[10].replace(" ", ""):
             self.callsign = msg[10].replace(" ", "")
+            self.operator = self.get_operator(AIRCRAFT_CODES)
             updated = True
         if msg[11] and self.altitude != msg[11]:
             self.altitude = msg[11]
@@ -68,6 +71,9 @@ class Aircraft:
             self.squawk = msg[17]
             updated = True
         return updated
+
+    def get_operator(self, ac_code_lookup):
+        return ac_code_lookup.get(self.callsign[0:3])
 
     def __repr__(self):
         return f"Hex: {self.hex} Call:{self.callsign} Model: {self.model} Lat:{self.lat} Long:{self.long} Alt: {self.altitude} Spd: {self.ground_speed} Squawk: {self.squawk}"
