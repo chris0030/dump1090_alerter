@@ -19,6 +19,11 @@ ALERTS = [
         "comparison": "lt",
         "value": 500,
     },
+    {
+        "field": "model",
+        "comparison": "equal",
+        "value": "McDonnell Douglas F-15E Strike Eagle",
+    }
 ]
 
 FIELDS = [
