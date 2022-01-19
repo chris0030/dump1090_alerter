@@ -83,7 +83,7 @@ class Aircraft:
         return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk]
 
     def __repr__(self):
-        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk]
+        return f"{self.hex},{self.callsign},{self.model},{self.operator},{self.lat},{self.long},{self.altitude},{self.ground_speed},{self.squawk}"
 
 def seperate_messages(message_string):
     decoded_string = message_string.decode('utf-8')
@@ -125,6 +125,6 @@ if __name__ == "__main__":
                     updated = True
                 if updated:
                     for ac in aircrafts:
-                        table_data.append(ac.return_table_row())
+                        table_data.append(ac)
                     live.update(generate_table(table_data))
 
