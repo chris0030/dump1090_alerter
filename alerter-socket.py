@@ -78,7 +78,7 @@ class Aircraft:
         return ac_code_lookup.get(self.callsign[0:3])
 
     def __repr__(self):
-        return f"{self.hex},{self.callsign},{self.model},{self.operator},{self.lat},{self.long},{self.altitude},{self.ground_speed},{self.squawk}"
+        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk]
 
 def seperate_messages(message_string):
     decoded_string = message_string.decode('utf-8')
@@ -111,6 +111,6 @@ if __name__ == "__main__":
                 if updated:
                     table_data = [TABLE_HEADERS]
                     for ac in aircrafts:
-                        table_data.append([ac])
+                        table_data.append(ac)
                     table = AsciiTable(table_data)
                     print(table.table)
