@@ -93,7 +93,7 @@ class Aircraft:
         return ac_code_lookup.get(self.callsign[0:3])
 
     def return_table_row(self):
-        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk]
+        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk, self.distance]
 
     def __repr__(self):
         return f"{self.hex},{self.callsign},{self.model},{self.operator},{self.lat},{self.long},{self.altitude},{self.ground_speed},{self.squawk}"
@@ -105,14 +105,14 @@ def seperate_messages(message_string):
 def parse_message_string(message_string):
     return message_string.split(',')
 
-TABLE_HEADERS = ["Hex", "Callsign", "Model", "Operator", "Lat", "Long", "Altitude", "Ground Speed", "Squawk"]
+TABLE_HEADERS = ["Hex", "Callsign", "Model", "Operator", "Lat", "Long", "Altitude", "Ground Speed", "Squawk", "Distance"]
 
 def generate_table(table_data):
     table = Table()
     for header in TABLE_HEADERS:
         table.add_column(header)
     for dr in table_data:
-        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8])
+        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8], dr[9])
     return table
 
 
