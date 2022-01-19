@@ -58,7 +58,9 @@ class Aircraft:
             return False
         if not self.lat or not self.long:
             return False
-        return geodesic((self.lat, self.long), (HOME_LAT, HOME_LONG)).kilometers
+        distance = float(geodesic((self.lat, self.long), (HOME_LAT, HOME_LONG)).kilometers)
+        print(distance)
+        return distance
 
     def update(self, msg):
         updated = False
@@ -93,7 +95,7 @@ class Aircraft:
         return ac_code_lookup.get(self.callsign[0:3])
 
     def return_table_row(self):
-        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk, self.distance]
+        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk,self.distance]
 
     def __repr__(self):
         return f"{self.hex},{self.callsign},{self.model},{self.operator},{self.lat},{self.long},{self.altitude},{self.ground_speed},{self.squawk}"
