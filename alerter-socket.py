@@ -55,9 +55,9 @@ class Aircraft:
 
     def get_distance(self):
         if not HOME_LAT or not HOME_LONG:
-            return False
+            return None
         if not self.lat or not self.long:
-            return False
+            return None
         distance = float(geodesic((self.lat, self.long), (HOME_LAT, HOME_LONG)).kilometers)
         print(distance)
         return distance
