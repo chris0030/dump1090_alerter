@@ -13,6 +13,11 @@ ALERTS = [
         "field": "squawk",
         "comparison": "equal",
         "value": "7001",
+    },
+    {
+        "field": "altitude",
+        "comparison": "lt",
+        "value": 500,
     }
 ]
 
@@ -123,6 +128,11 @@ class Aircraft:
             if alert['comparison'] == "equal":
                 value_to_check = self.get_dict()[alert['field']]
                 if value_to_check == alert['value']:
+                    return True
+                return False
+            elif alert['comparison'] == "lt":
+                value_to_check = int(self.get_dict()[alert['field']])
+                if value_to_check < alert['value']:
                     return True
                 return False
 
