@@ -58,9 +58,8 @@ class Aircraft:
             return None
         if not self.lat or not self.long:
             return None
-        distance = float(geodesic((self.lat, self.long), (HOME_LAT, HOME_LONG)).kilometers)
-        print(distance)
-        return distance
+        distance = geodesic((self.lat, self.long), (HOME_LAT, HOME_LONG)).kilometers
+        return "{:.2f}".format(distance)
 
     def update(self, msg):
         updated = False
