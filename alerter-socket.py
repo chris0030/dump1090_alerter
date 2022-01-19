@@ -217,14 +217,13 @@ if __name__ == "__main__":
                                 table_data.append(ac.return_table_row())
                         live.update(generate_table(table_data))
                         count = 0
-                    else:
-                        count += 1
-                    if count > 30:
-                        table_data = []
-                        for ac in aircrafts:
-                            if ac.seen_ago() < 60:
-                                table_data.append(ac.return_table_row())
-                        live.update(generate_table(table_data))
-                        count = 0
+            count += 1
+            if count > 30:
+                table_data = []
+                for ac in aircrafts:
+                    if ac.seen_ago() < 60:
+                        table_data.append(ac.return_table_row())
+                live.update(generate_table(table_data))
+                count = 0
                         
 
