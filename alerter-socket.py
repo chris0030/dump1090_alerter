@@ -76,7 +76,7 @@ class Aircraft:
         return ac_code_lookup.get(self.callsign[0:3])
 
     def __repr__(self):
-        return f"Hex: {self.hex} Call:{self.callsign} Model: {self.model} Lat:{self.lat} Long:{self.long} Alt: {self.altitude} Spd: {self.ground_speed} Squawk: {self.squawk}"
+        return f"Hex: {self.hex} Call:{self.callsign} Model: {self.model} Operator: {self.operator} Lat:{self.lat} Long:{self.long} Alt: {self.altitude} Spd: {self.ground_speed} Squawk: {self.squawk}"
 
 def seperate_messages(message_string):
     decoded_string = message_string.decode('utf-8')
