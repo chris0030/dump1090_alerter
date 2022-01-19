@@ -161,7 +161,7 @@ if __name__ == "__main__":
                     if updated:
                         table_data = []
                         for ac in aircrafts:
-                            if ac.seen_ago < 60:
+                            if ac.seen_ago() < 60:
                                 table_data.append(ac.return_table_row())
                         live.update(generate_table(table_data))
 
