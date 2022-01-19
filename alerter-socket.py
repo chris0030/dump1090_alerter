@@ -189,6 +189,7 @@ def generate_table(table_data):
 
 
 if __name__ == "__main__":
+    count = 0
     os.system('cls' if os.name == 'nt' else 'clear')
     aircrafts = []
     with Live(generate_table([]), refresh_per_second=1) as live:
@@ -215,4 +216,15 @@ if __name__ == "__main__":
                             if ac.seen_ago() < 60:
                                 table_data.append(ac.return_table_row())
                         live.update(generate_table(table_data))
+                        count = 0
+                    else:
+                        count += 1
+                    if count > 30:
+                        table_data = []
+                        for ac in aircrafts:
+                            if ac.seen_ago() < 60:
+                                table_data.append(ac.return_table_row())
+                        live.update(generate_table(table_data))
+                        count = 0
+                        
 
