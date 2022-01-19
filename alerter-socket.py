@@ -2,6 +2,7 @@ from re import I
 import socket
 from hex_lookup import HEX_LOOKUP
 from aircraft_code_lookup import AIRCRAFT_CODES
+import os
 
 FIELDS = [
     "message_type",
@@ -106,5 +107,6 @@ if __name__ == "__main__":
                     updated = True
                 if updated:
                     for ac in aircrafts:
+                        os.system('cls' if os.name == 'nt' else 'clear')
                         print(ac)
                     print("\n")
