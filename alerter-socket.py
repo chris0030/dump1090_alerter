@@ -8,6 +8,14 @@ from rich.table import Table
 from geopy.distance import geodesic
 from datetime import datetime
 
+ALERTS = [
+    {
+        "field": "squawk",
+        "comparison": "equal",
+        "value": "7001",
+    }
+]
+
 FIELDS = [
     "message_type",
     "transmission_type",
@@ -54,6 +62,23 @@ class Aircraft:
         self.distance = self.get_distance()
         self.last_updated = datetime.now()
 
+    def get_dict(self):
+        return {
+            "msg": self.message,
+            "hex": self.hex,
+            "callsign": self.callsign,
+            "altitude": self.altitude,
+            "ground_speed": self.ground_speed,
+            "lat": self.lat,
+            "long": self.long,
+            "vertical_rate": self.vertical_rate,
+            "squawk": self.squawk,
+            "model": self.model,
+            "operator": self.operator,
+            "distance": self.distance,
+            "last_updated": self.last_updated,
+        }
+
     def get_distance(self):
         if not HOME_LAT or not HOME_LONG:
             return None
@@ -93,6 +118,15 @@ class Aircraft:
             self.last_updated = datetime.now()
         return updated
 
+    def check_alerting(self, alerts):
+        for alert in alerts:
+            if alert['comparison'] == "equal":
+                value_to_check = self.get_dict()[alert['field']]
+                if value_to_check == alert['value']:
+                    return True
+                return False
+
+
     def get_operator(self, ac_code_lookup):
         return ac_code_lookup.get(self.callsign[0:3])
 
@@ -114,6 +148,7 @@ class Aircraft:
             self.squawk,
             self.distance,
             str(self.seen_ago()),
+            self.check_alerting(ALERTS),
         ]
 
     def __repr__(self):
@@ -126,14 +161,14 @@ def seperate_messages(message_string):
 def parse_message_string(message_string):
     return message_string.split(',')
 
-TABLE_HEADERS = ["Hex", "Callsign", "Model", "Operator", "Lat", "Long", "Altitude", "Ground Speed", "Squawk", "Distance", "Last Seen"]
+TABLE_HEADERS = ["Hex", "Callsign", "Model", "Operator", "Lat", "Long", "Altitude", "Ground Speed", "Squawk", "Distance", "Last Seen", "Alerting"]
 
 def generate_table(table_data):
     table = Table()
     for header in TABLE_HEADERS:
         table.add_column(header)
     for dr in table_data:
-        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8], dr[9], dr[10])
+        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8], dr[9], dr[10], dr[11])
     return table
 
 
