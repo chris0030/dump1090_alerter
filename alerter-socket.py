@@ -18,7 +18,7 @@ ALERTS = [
         "field": "altitude",
         "comparison": "lt",
         "value": 500,
-    }
+    },
 ]
 
 FIELDS = [

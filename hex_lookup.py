@@ -25,4 +25,9 @@ HEX_LOOKUP = {
     "43C8CE": MODEL['TEX2'],
     "43C553": MODEL['HAWK'],
     "43C47A": MODEL['HAWK'],
+    "43C555": MODEL['HAWK'],
+    "43C556": MODEL['HAWK'],
+    "43C55D": MODEL['HAWK'],
+    "43C560": MODEL['HAWK'],
+    "43C568": MODEL['HAWK'],
 }
