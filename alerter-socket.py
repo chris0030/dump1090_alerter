@@ -3,6 +3,7 @@ import socket
 from hex_lookup import HEX_LOOKUP
 from aircraft_code_lookup import AIRCRAFT_CODES
 import os
+from terminaltables import AsciiTable
 
 FIELDS = [
     "message_type",
@@ -77,7 +78,7 @@ class Aircraft:
         return ac_code_lookup.get(self.callsign[0:3])
 
     def __repr__(self):
-        return f"Hex: {self.hex} Call:{self.callsign} Model: {self.model} Operator: {self.operator} Lat:{self.lat} Long:{self.long} Alt: {self.altitude} Spd: {self.ground_speed} Squawk: {self.squawk}"
+        return f"{self.hex},{self.callsign},{self.model},{self.operator},{self.lat},{self.long},{self.altitude},{self.ground_speed},{self.squawk}"
 
 def seperate_messages(message_string):
     decoded_string = message_string.decode('utf-8')
@@ -85,6 +86,8 @@ def seperate_messages(message_string):
 
 def parse_message_string(message_string):
     return message_string.split(',')
+
+TABLE_HEADERS = ["Hex", "Callsign", "Model", "Operator", "Lat", "Long", "Altitude", "Ground Speed", "Squawk"]
 
 if __name__ == "__main__":
     aircrafts = []
@@ -106,7 +109,8 @@ if __name__ == "__main__":
                     aircrafts.append(ac)
                     updated = True
                 if updated:
-                    os.system('cls' if os.name == 'nt' else 'clear')
+                    table_data = [TABLE_HEADERS]
                     for ac in aircrafts:
-                        print(ac)
-                    print("\n")
+                        table_data.append([ac])
+                    table = AsciiTable(table_data)
+                    print(table.table)
