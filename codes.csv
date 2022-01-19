@@ -1692,7 +1692,6 @@
 3E9FD2,A400,Airbus Military A400M
 3EA048,A400,Airbus Military A400M
 3EA1CC,A400,A400M
-3EA3C1,TWR,TWR Radar
 3EA437,TOR,Panavia Tornado ECR
 3EA460,TOR,Panavia Tornado IDS 
 3EA541,A400,Airbus Military A400M
@@ -2385,7 +2384,6 @@
 3FBFD9,BALL,Thunder & Colt AX.8-105 SII Hot Air Balloon
 3FBFFF,BALL,Schroeder Fire Balloons G Hot Air Balloon
 400000,AS65,AVIC AC312 E
-400025,-TWR,Tower
 4005EC,SH36,Short SD3-60 200
 400910,F27,Fokker F27 500
 4009C8,FA20,Dassault Falcon 20 EW
@@ -4079,8 +4077,6 @@
 444A34,ZZZZ,Apco Aviation Thrust V
 4451ED,P46T,Piper PA-46 JetPROP
 446293,ULAC,Air Creation Racer 447
-447AC7,TEST,"Ground Station FFMSNE, Schneeberg, Au."
-447ACA,TWR,"TWR Ground Station FFMUNT, Untersber, Austria"
 447D00,C130,Lockheed C-130K Hercules
 447D01,C130,Lockheed C-130K Hercules
 447D02,C130,Lockheed C-130K Hercules
@@ -7622,7 +7618,6 @@ ADD70A,DH8B,Bombardier DHC-8 202
 ADDD7A,C172,1985 CESSNA 172P
 ADEDBE,DH8B,Bombardier DHC-8 202
 ADF052,C172,1985 CESSNA 172P
-ADFBA2,TEST,"GNDTEST, Denton Enterprise Airport, TX."
 ADFC60,BE40,Beech T-1A Jayhawk
 ADFC61,BE40,Beech T-1A Jayhawk
 ADFC62,BE40,Beech T-1A Jayhawk
