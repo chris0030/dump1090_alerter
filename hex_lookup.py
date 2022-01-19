@@ -11,4 +11,5 @@ HEX_LOOKUP = {
     "48506B": MODEL['B788'],
     "4CA63A": MODEL['A320'],
     "40641D": MODEL['A333'],
+    "406A95"L MODEL['A320'],
 }
