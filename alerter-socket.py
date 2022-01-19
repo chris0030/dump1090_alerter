@@ -3,9 +3,10 @@ import socket
 from hex_lookup import HEX_LOOKUP
 from aircraft_code_lookup import AIRCRAFT_CODES
 import os
-from terminaltables import AsciiTable
 from rich.live import Live
 from rich.table import Table
+from geopy.distance import geodesic
+
 
 FIELDS = [
     "message_type",
@@ -34,6 +35,8 @@ FIELDS = [
 
 PORT = 30003
 HOST = 'localhost'
+HOME_LAT = float(os.environ.get("HOME_LAT"))
+HOME_LONG = float(os.environ.get("HOME_LONG"))
 
 class Aircraft:
     def __init__(self, msg):
@@ -48,6 +51,14 @@ class Aircraft:
         self.squawk = msg[17]
         self.model = HEX_LOOKUP.get(self.hex)
         self.operator = self.get_operator(AIRCRAFT_CODES)
+        self.distance = self.get_distance()
+
+    def get_distance(self):
+        if not HOME_LAT or not HOME_LONG:
+            return False
+        if not self.lat or not self.long:
+            return False
+        return geodesic((self.lat, self.long), (HOME_LAT, HOME_LONG)).kilometers
 
     def update(self, msg):
         updated = False
@@ -64,9 +75,11 @@ class Aircraft:
             updated = True
         if msg[14] and self.lat != msg[14]:
             self.lat = msg[14]
+            self.distance = self.get_distance()
             updated = True
         if msg[15] and self.long != msg[15]:
             self.long = msg[15]
+            self.distance = self.get_distance()
             updated = True
         if msg[16] and self.vertical_rate != msg[16]:
             self.vertical_rate = msg[16]
