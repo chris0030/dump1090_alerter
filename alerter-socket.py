@@ -97,7 +97,19 @@ class Aircraft:
         return ac_code_lookup.get(self.callsign[0:3])
 
     def return_table_row(self):
-        return [self.hex,self.callsign,self.model,self.operator,self.lat,self.long,self.altitude,self.ground_speed,self.squawk,self.distance, self.last_updated]
+        return [
+            self.hex,
+            self.callsign,
+            self.model,
+            self.operator,
+            self.lat,
+            self.long,
+            self.altitude,
+            self.ground_speed,
+            self.squawk,
+            self.distance,
+            self.last_updated.strftime("%H:%M:%S"),
+        ]
 
     def __repr__(self):
         return f"{self.hex},{self.callsign},{self.model},{self.operator},{self.lat},{self.long},{self.altitude},{self.ground_speed},{self.squawk}"
