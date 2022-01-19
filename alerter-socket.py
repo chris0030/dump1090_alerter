@@ -178,7 +178,8 @@ def generate_table(table_data):
     for header in TABLE_HEADERS:
         table.add_column(header)
     for dr in table_data:
-        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8], dr[9], dr[10], str(dr[11]), style="cyan")
+        style = "indian_red" if dr[11] else "bright_white"
+        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8], dr[9], dr[10], str(dr[11]), style=style)
     return table
 
 
