@@ -107,7 +107,6 @@ if __name__ == "__main__":
     aircrafts = []
     with Live(generate_table([]), refresh_per_second=4) as live:
         while True:
-            table_data = []
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect((HOST, PORT))
                 message_string = s.recv(1024)
@@ -125,6 +124,7 @@ if __name__ == "__main__":
                         aircrafts.append(ac)
                         updated = True
                     if updated:
+                        table_data = []
                         for ac in aircrafts:
                             table_data.append(ac.return_table_row())
                         live.update(generate_table(table_data))
