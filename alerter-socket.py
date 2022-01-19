@@ -112,9 +112,9 @@ if __name__ == "__main__":
                     aircrafts.append(ac)
                     updated = True
                 if updated:
-                    os.system('cls' if os.name == 'nt' else 'clear')
                     table_data = [TABLE_HEADERS]
                     for ac in aircrafts:
                         table_data.append(ac.return_table_row())
                     table = AsciiTable(table_data)
-                    print(table.table)
+                    print(table.table, end='\r')
+
