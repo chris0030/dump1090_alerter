@@ -99,8 +99,7 @@ def generate_table(table_data):
     for header in TABLE_HEADERS:
         table.add_column(header)
     for data_row in table_data:
-        print(data_row)
-        table.add_row(data_row)
+        table.add_row(data for data in data_row)
     return table
 
 
