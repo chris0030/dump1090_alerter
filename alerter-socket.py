@@ -7,6 +7,8 @@ from rich.live import Live
 from rich.table import Table
 from geopy.distance import geodesic
 from datetime import datetime
+from typeguard import typechecked
+from typing import Optional
 
 ALERTS = [
     {
@@ -51,6 +53,21 @@ FIELDS = [
     "is_on_ground",
 ]
 
+TABLE_HEADERS = [
+    "Hex",
+    "Callsign", 
+    "Model",
+    "Operator",
+    "Lat",
+    "Long",
+    "Altitude",
+    "Ground Speed",
+    "Squawk",
+    "Distance",
+    "Last Seen",
+    "Alerting"
+]
+
 PORT = 30003
 HOST = 'localhost'
 HOME_LAT = float(os.environ.get("HOME_LAT"))
@@ -69,7 +86,7 @@ class Aircraft:
         self.squawk = msg[17]
         self.model = HEX_LOOKUP.get(self.hex)
         self.operator = self.get_operator(AIRCRAFT_CODES)
-        self.distance = self.get_distance()
+        self.distance = self.get_distance(HOME_LAT, HOME_LONG)
         self.last_updated = datetime.now()
 
     def get_dict(self):
@@ -89,15 +106,15 @@ class Aircraft:
             "last_updated": self.last_updated,
         }
 
-    def get_distance(self):
-        if not HOME_LAT or not HOME_LONG:
+    def get_distance(self, home_lat: float, home_long: float) -> Optional[str]:
+        if not home_lat or not home_long:
             return None
         if not self.lat or not self.long:
             return None
-        distance = geodesic((self.lat, self.long), (HOME_LAT, HOME_LONG)).kilometers
+        distance = geodesic((self.lat, self.long), (home_lat, home_long)).kilometers
         return "{:.2f}".format(distance)
 
-    def update(self, msg):
+    def update(self, msg: list) -> bool:
         updated = False
         self.msg = msg
         if msg[10] and self.callsign != msg[10].replace(" ", ""):
@@ -116,7 +133,7 @@ class Aircraft:
             updated = True
         if msg[15] and self.long != msg[15]:
             self.long = msg[15]
-            self.distance = self.get_distance()
+            self.distance = self.get_distance(HOME_LAT, HOME_LONG)
             updated = True
         if msg[16] and self.vertical_rate != msg[16]:
             self.vertical_rate = msg[16]
@@ -128,7 +145,8 @@ class Aircraft:
             self.last_updated = datetime.now()
         return updated
 
-    def check_alerting(self, alerts):
+    @typechecked
+    def check_alerting(self, alerts: list) -> bool:
         for alert in alerts:
             if alert['comparison'] == "equal":
                 value_to_check = self.get_dict()[alert['field']]
@@ -141,16 +159,17 @@ class Aircraft:
                     return True
                 return False
 
-
-    def get_operator(self, ac_code_lookup):
+    @typechecked
+    def get_operator(self, ac_code_lookup: dict) -> str:
         return ac_code_lookup.get(self.callsign[0:3])
 
-    def seen_ago(self):
-        now = datetime.now()
+    @typechecked
+    def seen_ago(self, now: datetime) -> int:
         time_delta = now - self.last_updated
         return int(time_delta.total_seconds())
 
-    def return_table_row(self):
+    @typechecked
+    def return_table_row(self) -> list:
         return [
             self.hex,
             self.callsign,
@@ -162,57 +181,91 @@ class Aircraft:
             self.ground_speed,
             self.squawk,
             self.distance,
-            str(self.seen_ago()),
+            str(self.seen_ago(datetime.now())),
             self.check_alerting(ALERTS),
         ]
 
-    def __repr__(self):
-        return f"{self.hex},{self.callsign},{self.model},{self.operator},{self.lat},{self.long},{self.altitude},{self.ground_speed},{self.squawk}"
+    @typechecked
+    def __repr__(self) -> str:
+        return ','.join(self.return_table_row())
 
-def seperate_messages(message_string):
+@typechecked
+def seperate_messages(message_string: bytes) -> list:
     decoded_string = message_string.decode('utf-8')
     return decoded_string.split('\r\n')
 
-def parse_message_string(message_string):
+@typechecked
+def parse_message_string(message_string: str) -> list:
     return message_string.split(',')
 
-TABLE_HEADERS = ["Hex", "Callsign", "Model", "Operator", "Lat", "Long", "Altitude", "Ground Speed", "Squawk", "Distance", "Last Seen", "Alerting"]
-
-def generate_table(table_data):
+@typechecked
+def generate_table(table_data: list) -> Table:
     table = Table()
     for header in TABLE_HEADERS:
         table.add_column(header)
     for dr in table_data:
         style = "indian_red" if dr[11] else "bright_white"
-        table.add_row(dr[0], dr[1], dr[2], dr[3], dr[4], dr[5], dr[6], dr[7], dr[8], dr[9], dr[10], str(dr[11]), style=style)
+        table.add_row(
+            dr[0],
+            dr[1],
+            dr[2],
+            dr[3],
+            dr[4],
+            dr[5],
+            dr[6],
+            dr[7],
+            dr[8],
+            dr[9],
+            dr[10],
+            str(dr[11]),
+            style=style
+        )
     return table
 
+@typechecked
+def return_message_from_socket(host: str, port: int) -> Optional[bytes]:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.connect((HOST, PORT))
+        except ConnectionRefusedError:
+            print("Connection failed")
+            return None
+        message_string = s.recv(1024)
+        return message_string
+
+@typechecked
+def parsed_message_valid(parsed_message: list) -> bool:
+    if parsed_message and len(parsed_message) > 17:
+        return True
+    return False
+
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 if __name__ == "__main__":
-    os.system('cls' if os.name == 'nt' else 'clear')
+    clear_terminal()
     aircrafts = []
     with Live(generate_table([]), refresh_per_second=1) as live:
         while True:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.connect((HOST, PORT))
-                message_string = s.recv(1024)
-                message_array = seperate_messages(message_string)
-                for split_message in message_array:
-                    updated = False
-                    parsed_message = parse_message_string(split_message)
-                    if not parsed_message or parsed_message == [''] or len(parsed_message) < 18:
-                        continue
-                    ac = Aircraft(parsed_message)
-                    matching_ac = [aircraft for aircraft in aircrafts if aircraft.hex == ac.hex]
-                    if matching_ac:
-                        updated = matching_ac[0].update(parsed_message)
-                    else:
-                        aircrafts.append(ac)
-                        updated = True
+            message_string = return_message_from_socket(HOST, PORT)
+            if not message_string:
+                print("Unable to connect to socket")
+                exit()
+            message_array = seperate_messages(message_string)
+            for split_message in message_array:
+                updated = False
+                parsed_message = parse_message_string(split_message)
+                if not parsed_message_valid(parsed_message):
+                    continue
+                ac = Aircraft(parsed_message)
+                matching_ac = [aircraft for aircraft in aircrafts if aircraft.hex == ac.hex]
+                if matching_ac:
+                    updated = matching_ac[0].update(parsed_message)
+                else:
+                    aircrafts.append(ac)
+                    updated = True
             table_data = []
             for ac in aircrafts:
-                if ac.seen_ago() < 60:
+                if ac.seen_ago(datetime.now()) < 60:
                     table_data.append(ac.return_table_row())
             live.update(generate_table(table_data))
-                        
-
